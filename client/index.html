@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Circuit Editor - Collaborative</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- NAVBAR -->
+    <header class="navbar">
+      <div class="navbar-brand">
+        <div class="logo">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <circle cx="12" cy="12" r="3" />
+            <path
+              d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"
+            />
+          </svg>
+          <span>CircuitEditor</span>
+        </div>
+        <div class="nav-menu">
+          <span class="nav-item">Project</span>
+          <span class="nav-item">Circuit</span>
+          <span class="nav-item">Tools</span>
+          <span class="nav-item">Help</span>
+        </div>
+      </div>
+      <div class="navbar-center">
+        <span id="projectTitle">Untitled</span>
+      </div>
+      <div class="navbar-actions">
+        <div class="session-info">
+          <span class="session-badge" id="sessionBadge">No Session</span>
+        </div>
+        <div class="users-online" id="usersOnline"></div>
+        <button class="btn btn-secondary" id="shareBtn" disabled>Share</button>
+        <button class="btn btn-primary" id="newSessionBtn">New Session</button>
+        <button class="btn btn-secondary" id="joinSessionBtn">Join</button>
+      </div>
+    </header>
+
+    <main class="main-container">
+      <!-- LEFT SIDEBAR - Circuit Elements -->
+      <aside class="sidebar sidebar-left">
+        <div class="sidebar-header">
+          <h3>Circuit Elements</h3>
+          <button class="collapse-btn">−</button>
+        </div>
+
+        <div class="search-box">
+          <input type="text" placeholder="Search.." />
+        </div>
+
+        <div class="sidebar-section">
+          <div class="section-header">
+            <h4>Input</h4>
+            <span class="chevron">▼</span>
+          </div>
+          <div class="section-content">
+            <div class="gate-palette">
+              <div class="gate-item" data-gate="INPUT" draggable="true">
+                <div class="gate-icon">IN</div>
+                <span>Input</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-section">
+          <div class="section-header">
+            <h4>Output</h4>
+            <span class="chevron">▼</span>
+          </div>
+          <div class="section-content">
+            <div class="gate-palette">
+              <div class="gate-item" data-gate="OUTPUT" draggable="true">
+                <div class="gate-icon">OUT</div>
+                <span>Output</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-section">
+          <div class="section-header">
+            <h4>Gates</h4>
+            <span class="chevron">▼</span>
+          </div>
+          <div class="section-content">
+            <div class="gate-palette">
+              <div class="gate-item" data-gate="AND" draggable="true">
+                <div class="gate-icon">AND</div>
+                <span>AND</span>
+              </div>
+              <div class="gate-item" data-gate="OR" draggable="true">
+                <div class="gate-icon">OR</div>
+                <span>OR</span>
+              </div>
+              <div class="gate-item" data-gate="NOT" draggable="true">
+                <div class="gate-icon">NOT</div>
+                <span>NOT</span>
+              </div>
+              <div class="gate-item" data-gate="XOR" draggable="true">
+                <div class="gate-icon">XOR</div>
+                <span>XOR</span>
+              </div>
+              <div class="gate-item" data-gate="NAND" draggable="true">
+                <div class="gate-icon">NAND</div>
+                <span>NAND</span>
+              </div>
+              <div class="gate-item" data-gate="NOR" draggable="true">
+                <div class="gate-icon">NOR</div>
+                <span>NOR</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- CANVAS CONTAINER -->
+      <div class="canvas-container">
+        <div class="canvas-toolbar">
+          <button class="tool-btn active" id="selectTool" title="Select (V)">
+            Select
+          </button>
+          <button class="tool-btn" id="wireTool" title="Wire (W)">Wire</button>
+          <div class="toolbar-divider"></div>
+          <button class="tool-btn" id="deleteTool" title="Delete">
+            Delete
+          </button>
+          <button class="tool-btn" id="clearTool" title="Clear All">
+            Clear
+          </button>
+          <div class="toolbar-divider"></div>
+          <button class="tool-btn" id="zoomOut">−</button>
+          <button class="tool-btn" id="zoomIn">+</button>
+          <span class="zoom-level" id="zoomLevel">100%</span>
+        </div>
+        <canvas id="circuitCanvas"></canvas>
+        <div class="cursors-overlay" id="cursorsOverlay"></div>
+        <div class="readonly-badge" id="readonlyBadge" style="display: none">
+          View Only
+        </div>
+      </div>
+
+      <!-- RIGHT SIDEBAR - Properties -->
+      <aside class="sidebar sidebar-right">
+        <div class="sidebar-header">
+          <h3>Properties</h3>
+          <button class="collapse-btn">−</button>
+        </div>
+
+        <div class="properties-panel" id="propertiesPanel">
+          <div class="property-group">
+            <div class="property-label">Project:</div>
+            <input
+              type="text"
+              class="property-input"
+              value="Untitled"
+              id="projectName"
+            />
+          </div>
+          <div class="property-group">
+            <div class="property-label">Circuit:</div>
+            <input
+              type="text"
+              class="property-input"
+              value="Main"
+              id="circuitName"
+            />
+          </div>
+        </div>
+
+        <div class="sidebar-section">
+          <div class="section-header">
+            <h4>Session Users</h4>
+            <span class="chevron">▼</span>
+          </div>
+          <div class="section-content">
+            <div class="users-list" id="usersList">
+              <div class="empty-state small"><p>No active session</p></div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <!-- Create Session Modal -->
+    <div class="modal" id="createSessionModal">
+      <div class="modal-backdrop"></div>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Create New Session</h2>
+          <button class="modal-close" id="closeCreateModal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="ownerName">Your Name</label>
+            <input type="text" id="ownerName" placeholder="Enter your name" />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" id="cancelCreate">Cancel</button>
+          <button class="btn btn-primary" id="confirmCreate">
+            Create Session
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Join Session Modal -->
+    <div class="modal" id="joinSessionModal">
+      <div class="modal-backdrop"></div>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Join Session</h2>
+          <button class="modal-close" id="closeJoinModal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="inviteCode">Invite Code</label>
+            <input
+              type="text"
+              id="inviteCode"
+              placeholder="Enter 6-character code"
+            />
+          </div>
+          <div class="form-group">
+            <label for="joinName">Your Name</label>
+            <input type="text" id="joinName" placeholder="Enter your name" />
+          </div>
+          <div class="form-group">
+            <label>Join as</label>
+            <div class="role-selector">
+              <label class="role-option"
+                ><input
+                  type="radio"
+                  name="joinRole"
+                  value="editor"
+                  checked
+                /><span>Editor</span></label
+              >
+              <label class="role-option"
+                ><input type="radio" name="joinRole" value="viewer" /><span
+                  >Viewer</span
+                ></label
+              >
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" id="cancelJoin">Cancel</button>
+          <button class="btn btn-primary" id="confirmJoin">Join Session</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Share Modal -->
+    <div class="modal" id="shareModal">
+      <div class="modal-backdrop"></div>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Share Session</h2>
+          <button class="modal-close" id="closeShareModal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="share-code">
+            <span class="share-label">Invite Code</span>
+            <div class="code-display">
+              <span id="shareCodeDisplay">------</span>
+              <button class="btn btn-secondary" id="copyCodeBtn">Copy</button>
+            </div>
+          </div>
+          <p class="share-hint">Share this code with others to join.</p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary" id="closeShare">Done</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+    <script type="module" src="js/app.js"></script>
+  </body>
+</html>
