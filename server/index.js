@@ -39,7 +39,7 @@ function getYDoc(sessionId) {
   if (!docs.has(sessionId)) {
     const doc = new Y.Doc();
 
-    // Initialize circuit data structures
+    // Initialize circuit data structures     
     doc.getMap("gates"); // Y.Map for gates
     doc.getArray("wires"); // Y.Array for wires
     doc.getMap("metadata"); // Y.Map for session metadata

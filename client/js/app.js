@@ -123,6 +123,10 @@ class CircuitEditorApp {
       .getElementById("deleteTool")
       .addEventListener("click", () => this.editor.setTool("delete"));
     document.getElementById("clearTool").addEventListener("click", () => {
+      if (!this.sessionId) {
+        this.showToast("Create or join a session first", "error");
+        return;
+      }
       if (confirm("Clear all components?")) {
         this.editor.clearAll();
       }
@@ -159,6 +163,11 @@ class CircuitEditorApp {
       e.preventDefault();
       const gateType = e.dataTransfer.getData("gate-type");
       if (gateType) {
+        // Check if session is active
+        if (!this.sessionId) {
+          this.showToast("Create or join a session to add components", "error");
+          return;
+        }
         const rect = canvas.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top - 44; // Account for toolbar

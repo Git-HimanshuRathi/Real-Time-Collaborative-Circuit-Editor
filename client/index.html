@@ -28,15 +28,6 @@
           </svg>
           <span>CircuitEditor</span>
         </div>
-        <div class="nav-menu">
-          <span class="nav-item">Project</span>
-          <span class="nav-item">Circuit</span>
-          <span class="nav-item">Tools</span>
-          <span class="nav-item">Help</span>
-        </div>
-      </div>
-      <div class="navbar-center">
-        <span id="projectTitle">Untitled</span>
       </div>
       <div class="navbar-actions">
         <div class="session-info">
@@ -54,17 +45,11 @@
       <aside class="sidebar sidebar-left">
         <div class="sidebar-header">
           <h3>Circuit Elements</h3>
-          <button class="collapse-btn">−</button>
-        </div>
-
-        <div class="search-box">
-          <input type="text" placeholder="Search.." />
         </div>
 
         <div class="sidebar-section">
           <div class="section-header">
-            <h4>Input</h4>
-            <span class="chevron">▼</span>
+            <h4>Input/Output</h4>
           </div>
           <div class="section-content">
             <div class="gate-palette">
@@ -72,17 +57,6 @@
                 <div class="gate-icon">IN</div>
                 <span>Input</span>
               </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="sidebar-section">
-          <div class="section-header">
-            <h4>Output</h4>
-            <span class="chevron">▼</span>
-          </div>
-          <div class="section-content">
-            <div class="gate-palette">
               <div class="gate-item" data-gate="OUTPUT" draggable="true">
                 <div class="gate-icon">OUT</div>
                 <span>Output</span>
@@ -93,8 +67,7 @@
 
         <div class="sidebar-section">
           <div class="section-header">
-            <h4>Gates</h4>
-            <span class="chevron">▼</span>
+            <h4>Logic Gates</h4>
           </div>
           <div class="section-content">
             <div class="gate-palette">
@@ -153,38 +126,19 @@
         </div>
       </div>
 
-      <!-- RIGHT SIDEBAR - Properties -->
+      <!-- RIGHT SIDEBAR - Properties & Users -->
       <aside class="sidebar sidebar-right">
         <div class="sidebar-header">
           <h3>Properties</h3>
-          <button class="collapse-btn">−</button>
         </div>
 
         <div class="properties-panel" id="propertiesPanel">
-          <div class="property-group">
-            <div class="property-label">Project:</div>
-            <input
-              type="text"
-              class="property-input"
-              value="Untitled"
-              id="projectName"
-            />
-          </div>
-          <div class="property-group">
-            <div class="property-label">Circuit:</div>
-            <input
-              type="text"
-              class="property-input"
-              value="Main"
-              id="circuitName"
-            />
-          </div>
+          <div class="empty-state small"><p>Select a component</p></div>
         </div>
 
         <div class="sidebar-section">
           <div class="section-header">
             <h4>Session Users</h4>
-            <span class="chevron">▼</span>
           </div>
           <div class="section-content">
             <div class="users-list" id="usersList">
